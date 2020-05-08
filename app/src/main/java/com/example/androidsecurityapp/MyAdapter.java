@@ -55,8 +55,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<AppInfo> appList) {
+    public MyAdapter(List<AppInfo> appList, PackageManager packageManager) {
         this.mDataset = appList;
+        this.pm = packageManager;
     }
 
     // Create new views (invoked by the layout manager)
@@ -76,7 +77,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         AppInfo appInfo = mDataset.get(position);
-        holder.imageView.setImageDrawable(appInfo.getIcon());
+        try {
+            holder.imageView.setImageDrawable(pm.getApplicationIcon(appInfo.getPackageName()));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         List<String> dangerousPremissons = appInfo.getDangerousPremissons();
         List<String> commonPremissons = appInfo.getCommonPremissons();

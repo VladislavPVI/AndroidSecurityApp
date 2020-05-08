@@ -1,22 +1,22 @@
 package com.example.androidsecurityapp;
 
-import android.graphics.drawable.Drawable;
-
 import java.util.List;
 
 public class AppInfo {
     private String label;
-    private Drawable icon;
     private List<String> commonPremissons;
     private List<String> dangerousPremissons;
     private boolean expanded;
+    private boolean trust;
+    private String packageName;
 
-    public AppInfo(String label, Drawable icon, List<String> commonPremissons, List<String> dangerousPremissons) {
+    public AppInfo(String label, List<String> commonPremissons, List<String> dangerousPremissons,String packageName) {
         this.label = label;
-        this.icon = icon;
         this.commonPremissons = commonPremissons;
         this.dangerousPremissons = dangerousPremissons;
         this.expanded = false;
+        this.trust = false;
+        this.packageName = packageName;
     }
 
     public String getLabel() {
@@ -25,14 +25,6 @@ public class AppInfo {
 
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    public Drawable getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
     }
 
     public List<String> getCommonPremissons() {
@@ -57,5 +49,21 @@ public class AppInfo {
 
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
+    }
+
+    public boolean isTrust() {
+        return trust;
+    }
+
+    public void setTrust(boolean trust) {
+        this.trust = trust;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 }

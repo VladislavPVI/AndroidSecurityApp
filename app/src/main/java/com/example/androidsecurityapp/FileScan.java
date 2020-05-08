@@ -3,6 +3,7 @@ package com.example.androidsecurityapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -15,7 +16,6 @@ public class FileScan extends AppCompatActivity {
     private List<File> apkFiles = new ArrayList<>();
     private TextView apkView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +25,7 @@ public class FileScan extends AppCompatActivity {
         for (String storage : getStorageDirectories())
             findApk(new File(storage));
         apkView.setText(apkFiles.toString());
+
 
     }
 
@@ -41,6 +42,8 @@ public class FileScan extends AppCompatActivity {
                 apkFiles.add(file);
 
         }
+
+
 
     }
 

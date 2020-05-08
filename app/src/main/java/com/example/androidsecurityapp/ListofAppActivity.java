@@ -1,14 +1,22 @@
 package com.example.androidsecurityapp;
 
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ListofAppActivity extends AppCompatActivity {
@@ -33,10 +41,31 @@ public class ListofAppActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
-        mAdapter = new MyAdapter(appInfos);
+        saveAppData("appData",appInfos);
+        List<AppInfo> appData = getAppData("appData");
+        mAdapter = new MyAdapter(appInfos,getPackageManager());
         recyclerView.setAdapter(mAdapter);
 
+    }
+
+    public void saveAppData(String key , Object obj) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(obj);
+        editor.putString("saveDataApp", Instant.now().toString());
+
+        editor.putString(key,json);
+        editor.apply();     // This line is IMPORTANT !!!
+    }
+
+    public List<AppInfo> getAppData(String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        String json = prefs.getString(key,"");
+        java.lang.reflect.Type type = new TypeToken<List<AppInfo>>(){}.getType();
+        List<AppInfo> obj = gson.fromJson(json, type);
+        return obj;
     }
 
     private List<AppInfo> initData() throws PackageManager.NameNotFoundException {
@@ -59,7 +88,7 @@ public class ListofAppActivity extends AppCompatActivity {
                     commonPremissons.add(perm);
                 }
             }
-            AppInfo appInfo = new AppInfo(ap.loadLabel(pm).toString(),ap.loadIcon(pm),commonPremissons,dangerousPremissons);
+            AppInfo appInfo = new AppInfo(ap.loadLabel(pm).toString(),commonPremissons,dangerousPremissons,ap.packageName);
             appList.add(appInfo);
         }
         return appList;

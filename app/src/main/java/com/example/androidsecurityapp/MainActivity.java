@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button fab = findViewById(R.id.button);
         Button scan = findViewById(R.id.fileScanButton);
+        Button bat = findViewById(R.id.batteryB);
+        Button ram = findViewById(R.id.procB);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -28,6 +31,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,FileScan.class);
+                startActivity(intent);
+            }
+        });
+
+        bat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sample = new Intent("android.intent.action.POWER_USAGE_SUMMARY");
+                startActivity(sample);
+            }
+        });
+
+        ram.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RamActivity.class);
                 startActivity(intent);
             }
         });
