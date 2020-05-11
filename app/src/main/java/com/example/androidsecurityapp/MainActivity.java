@@ -19,6 +19,24 @@ public class MainActivity extends AppCompatActivity {
         Button scan = findViewById(R.id.fileScanButton);
         Button bat = findViewById(R.id.batteryB);
         Button ram = findViewById(R.id.procB);
+        Button sensor = findViewById(R.id.sensorButt);
+        Button stat = findViewById(R.id.usageStat);
+
+        stat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,AppUsage.class);
+                startActivity(intent);
+            }
+        });
+
+        sensor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,SensorActivity.class);
+                startActivity(intent);
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

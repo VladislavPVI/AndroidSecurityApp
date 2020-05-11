@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.ActivityManager;
+import android.app.AppOpsManager;
 import android.app.Application;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -59,18 +61,21 @@ public class RamActivity extends AppCompatActivity {
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
         HashMap<String, String> fieldValue = getSettings();
-        saveHashMap("mySettings",fieldValue);
+        saveHashMap("mySettings", fieldValue);
         HashMap<String, String> mySetings = getHashMap("mySettings");
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String time = prefs.getString("saveData","");
+        String time = prefs.getString("saveData", "");
 
-        System.out.println("wfwrf");
+
 
 
     }
 
-    public void saveHashMap(String key , Object obj) {
+
+
+
+    public void saveHashMap(String key, Object obj) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
@@ -78,26 +83,27 @@ public class RamActivity extends AppCompatActivity {
         editor.putString("saveData", Instant.now().toString());
 
 
-        editor.putString(key,json);
+        editor.putString(key, json);
         editor.apply();     // This line is IMPORTANT !!!
     }
 
-    public HashMap<String,String> getHashMap(String key) {
+    public HashMap<String, String> getHashMap(String key) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
-        String json = prefs.getString(key,"");
-        java.lang.reflect.Type type = new TypeToken<HashMap<String,String>>(){}.getType();
+        String json = prefs.getString(key, "");
+        java.lang.reflect.Type type = new TypeToken<HashMap<String, String>>() {
+        }.getType();
         HashMap<String, String> obj = gson.fromJson(json, type);
         return obj;
     }
 
-    public HashMap<String, String> getSettings(){
+    public HashMap<String, String> getSettings() {
         HashMap<String, String> fieldValue = new HashMap<>();
         for (Secure s : Secure.values()) {
             String setting = s.toString().toLowerCase();
             String value = Settings.Secure.getString(getContentResolver(), setting);
             if (value == null)
-                fieldValue.put(setting,"0");
+                fieldValue.put(setting, "0");
 
             else fieldValue.put(setting, value);
         }
@@ -105,7 +111,7 @@ public class RamActivity extends AppCompatActivity {
             String setting = s.toString().toLowerCase();
             String value = Settings.Global.getString(getContentResolver(), setting);
             if (value == null)
-                fieldValue.put(setting,"0");
+                fieldValue.put(setting, "0");
 
             else fieldValue.put(setting, value);
         }
@@ -113,7 +119,7 @@ public class RamActivity extends AppCompatActivity {
         for (SystemS s : SystemS.values()) {
             String setting = s.toString().toLowerCase();
             String value = Settings.System.getString(getContentResolver(), setting);
-            if (value == null) fieldValue.put(setting,"0");
+            if (value == null) fieldValue.put(setting, "0");
 
             else fieldValue.put(setting, value);
         }
@@ -121,7 +127,7 @@ public class RamActivity extends AppCompatActivity {
 
         long mode = android.provider.Settings.Secure.getLong(getContentResolver(), "lockscreen.password_type",
                 DevicePolicyManager.PASSWORD_QUALITY_SOMETHING);
-        fieldValue.put(PASSWORD_TYPE_KEY,String.valueOf(mode));
+        fieldValue.put(PASSWORD_TYPE_KEY, String.valueOf(mode));
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -130,7 +136,7 @@ public class RamActivity extends AppCompatActivity {
         builder.append("x");
         builder.append(metrics.heightPixels);
 
-        fieldValue.put("DisplayMetric",builder.toString());
+        fieldValue.put("DisplayMetric", builder.toString());
         fieldValue.put("language", Resources.getSystem().getConfiguration().locale.getLanguage());
         Account[] accounts = AccountManager.get(this).getAccounts();
 
@@ -138,7 +144,7 @@ public class RamActivity extends AppCompatActivity {
 
         for (Account account : accounts)
             builder.append(account.name).append(" ");
-        fieldValue.put("accounts",builder.toString());
+        fieldValue.put("accounts", builder.toString());
 
 //        final String service = Context.CONNECTIVITY_SERVICE;
 //        final ConnectivityManager manager = (ConnectivityManager) this.getSystemService(service);
@@ -147,7 +153,6 @@ public class RamActivity extends AppCompatActivity {
 
 
     }
-
 
 
     public int getScreenBrightnessInt255() {
