@@ -13,14 +13,16 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutApk"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageUsage"
+                android:id="@+id/imageApk"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -31,29 +33,178 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageUsage"
+                app:layout_constraintStart_toEndOf="@+id/imageApk"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/titleUsage"
+                    android:id="@+id/titleApk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/lastTimeUsage"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/allTimeUsage"
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/textView28"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:text="Mobile"
+                            android:textStyle="bold" />
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/rxMob"
+                                    android:layout_width="60dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="TextView" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:tint="@android:color/black"
+                                    app:srcCompat="@android:drawable/stat_sys_download" />
+
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/txMob"
+                                    android:layout_width="60dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="TextView" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:tint="@android:color/black"
+                                    app:srcCompat="@android:drawable/stat_sys_upload" />
+                            </TableRow>
+
+                        </TableLayout>
+                    </TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Last used:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/apkPath"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="TextView" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:orientation="horizontal">
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/textView29"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:text="WIFI"
+                            android:textStyle="bold" />
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+
+                            <TableRow
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/rxWIFI"
+                                    android:layout_width="60dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="TextView" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:tint="@android:color/black"
+                                    app:srcCompat="@android:drawable/stat_sys_download" />
+
+                            </TableRow>
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/txWIFI"
+                                    android:layout_width="60dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="TextView" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:tint="@android:color/black"
+                                    app:srcCompat="@android:drawable/stat_sys_upload" />
+                            </TableRow>
+
+                        </TableLayout>
+                    </TableRow>
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="Foreground time:"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/allTimeUsage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="TextView" />
+
+                </LinearLayout>
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

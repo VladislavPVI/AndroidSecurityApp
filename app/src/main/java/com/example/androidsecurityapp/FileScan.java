@@ -1,60 +1,69 @@
 package com.example.androidsecurityapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FileScan extends AppCompatActivity {
 
-    private List<File> apkFiles = new ArrayList<>();
-    private TextView apkView;
+    private static final String APP_PREFERENCES = "analyseData";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_scan);
-        apkView = findViewById(R.id.apkView);
+        PackageManager pm = getPackageManager();
+        // apkView = findViewById(R.id.apkView);
 
-        for (String storage : getStorageDirectories())
-            findApk(new File(storage));
-        apkView.setText(apkFiles.toString());
+        SharedPreferences  prefs = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
 
+        String json = prefs.getString("apkPaths", "");
+        java.lang.reflect.Type type = new TypeToken<List<String>>() {
+        }.getType();
+        List<String> apkFiles = gson.fromJson(json, type);
 
-    }
+        List<ApkInfo> apkInfoList = new ArrayList<>();
 
-    public void findApk(File file) {
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            if (files.length > 0) {
-                for (File fileInt : files)
-                    findApk(fileInt);
+        for (String path : apkFiles) {
+            File file = new File(path);
+            if (file.exists()) {
+                PackageInfo pi = pm.getPackageArchiveInfo(path, 0);
+                pi.applicationInfo.sourceDir = path;
+                pi.applicationInfo.publicSourceDir = path;
+                Drawable apkIcon = pi.applicationInfo.loadIcon(pm);
+                String apkTitle = (String) pi.applicationInfo.loadLabel(pm);
+                apkInfoList.add(new ApkInfo(apkIcon, apkTitle, file.lastModified(), path, file.length()));
             }
-        } else {
-            String[] split = file.getName().split("[.]");
-            if (split[split.length - 1].equals("apk"))
-                apkFiles.add(file);
-
         }
+        RecyclerView recyclerView = findViewById(R.id.recyclerApk);
 
+        if (apkInfoList.size() != 0) {
+            MyAdapterForApk mAdapter = new MyAdapterForApk(apkInfoList);
+            recyclerView.setAdapter(mAdapter);
+        }
 
 
     }
 
-    public List<String> getStorageDirectories() {
-
-        List<String> results = new ArrayList<>();
-        File[] externalDirs = getExternalFilesDirs(null);
-        for (File file : externalDirs) {
-            String path = file.getPath().split("/Android")[0];
-            results.add(path);
-        }
-        return results;
-    }
 }

@@ -1,5 +1,6 @@
 package com.example.androidsecurityapp;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -24,43 +25,50 @@ public class ListofAppActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter mAdapter;
+    private List<AppInfo> appInfos;
+    private SharedPreferences prefs;
+
+    public static final String APP_PREFERENCES = "analyseData";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listof_app);
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        recyclerView = findViewById(R.id.my_recycler_view);
+        prefs = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
+    }
 
-        // specify an adapter (see also next example)
-
-        List<AppInfo> appInfos = new ArrayList<>();
-
-        try {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        appInfos = getAppData("appData");
+        if (appInfos==null)
             appInfos = initData();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        saveAppData("appData",appInfos);
-        List<AppInfo> appData = getAppData("appData");
+
         mAdapter = new MyAdapter(appInfos,getPackageManager());
         recyclerView.setAdapter(mAdapter);
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        for (AppInfo appInfo : appInfos)
+            appInfo.setExpanded(false);
+        saveAppData("appData",appInfos);
+    }
+
     public void saveAppData(String key , Object obj) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(obj);
-        editor.putString("saveDataApp", Instant.now().toString());
 
         editor.putString(key,json);
-        editor.apply();     // This line is IMPORTANT !!!
+        editor.apply();
     }
 
     public List<AppInfo> getAppData(String key) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
         String json = prefs.getString(key,"");
         java.lang.reflect.Type type = new TypeToken<List<AppInfo>>(){}.getType();
@@ -68,7 +76,7 @@ public class ListofAppActivity extends AppCompatActivity {
         return obj;
     }
 
-    private List<AppInfo> initData() throws PackageManager.NameNotFoundException {
+    private List<AppInfo> initData() {
         List<AppInfo> appList = new ArrayList<>();
         PackageManager pm = getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -76,7 +84,12 @@ public class ListofAppActivity extends AppCompatActivity {
         for (ApplicationInfo ap : packages) {
             List<String> commonPremissons = new ArrayList<>();
             List<String> dangerousPremissons = new ArrayList<>();
-            PackageInfo packageInfo = pm.getPackageInfo(ap.packageName, PackageManager.GET_PERMISSIONS);
+            PackageInfo packageInfo = null;
+            try {
+                packageInfo = pm.getPackageInfo(ap.packageName, PackageManager.GET_PERMISSIONS);
+            } catch (PackageManager.NameNotFoundException e) {
+                continue;
+            }
             String[] stringArray = packageInfo.requestedPermissions;
 
             if (stringArray != null) {
@@ -88,7 +101,11 @@ public class ListofAppActivity extends AppCompatActivity {
                     commonPremissons.add(perm);
                 }
             }
-            AppInfo appInfo = new AppInfo(ap.loadLabel(pm).toString(),commonPremissons,dangerousPremissons,ap.packageName);
+            AppInfo appInfo = null;
+            if (dangerousPremissons.size()!=0)
+                appInfo = new AppInfo(ap.loadLabel(pm).toString(),commonPremissons,dangerousPremissons,ap.packageName,false);
+            else appInfo = new AppInfo(ap.loadLabel(pm).toString(),commonPremissons,dangerousPremissons,ap.packageName,true);
+
             appList.add(appInfo);
         }
         return appList;

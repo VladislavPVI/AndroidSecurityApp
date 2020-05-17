@@ -6,79 +6,286 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="400dp"
-        android:layout_height="384dp"
-        app:layout_constraintBottom_toTopOf="@+id/fileScanButton"
+    <TextView
+        android:id="@+id/textViewModel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ProgressBar
+        android:id="@+id/loading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="282dp"
+        android:layout_height="316dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAnalyse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewModel"
+        app:layout_constraintVertical_bias="0.375" />
+
+    <ProgressBar
+        android:id="@+id/progressBarMain"
+        style="?android:progressBarStyleHorizontal"
+        android:layout_width="304dp"
+        android:layout_height="293dp"
+        android:layout_marginTop="16dp"
+        android:max="100"
+        android:min="0"
+        android:progress="100"
+        android:progressDrawable="@drawable/circle"
+        android:progressTint="@color/colorAccent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAnalyse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.485"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewModel"
+        app:layout_constraintVertical_bias="0.282" />
+
+    <TextView
+        android:id="@+id/hint"
+        android:layout_width="342dp"
+        android:layout_height="34dp"
+        android:layout_marginBottom="28dp"
+        android:gravity="center"
+        android:text="Your phone security status is unknown. Please click ANALYSE"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsArea"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/scoreText"
+        android:layout_width="224dp"
+        android:layout_height="88dp"
+        android:gravity="center"
+        android:text="94/100 EXCELLENT!"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="30sp"
+        android:textStyle="italic"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarMain"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarMain"
+        app:layout_constraintStart_toStartOf="@+id/progressBarMain"
+        app:layout_constraintTop_toTopOf="@+id/progressBarMain"
+        app:layout_constraintVertical_bias="0.497" />
+
+    <Button
+        android:id="@+id/buttonAnalyse"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="164dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="24dp"
+        android:text="Analyse"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/buttonsArea"
+        android:layout_width="411dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.149"
-        app:srcCompat="@drawable/anal" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
-        android:text="Приложения"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sensorButt"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent" />
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/fileScanButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="FileScan"
-        app:layout_constraintBottom_toTopOf="@+id/batteryB"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent" />
+            <ImageButton
+                android:id="@+id/imageButtonPerm"
+                style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/settingsnew" />
 
-    <Button
-        android:id="@+id/batteryB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Battery"
-        app:layout_constraintBottom_toTopOf="@+id/procB"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Permissions"
+                android:textSize="10sp" />
 
-    <Button
-        android:id="@+id/procB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="Proc"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/permText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@android:string/ok"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/sensorButt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="60dp"
-        android:text="sensor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/usageStat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="useStat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sensorButt"
-        app:layout_constraintStart_toEndOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/procB" />
+            <ImageButton
+                android:id="@+id/imageButtonRoot"
+                style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/iconroot" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Root"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/rootText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@android:string/ok"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButtonApk"
+                style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/newapk" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=".apk"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/apkText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@android:string/ok"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButtonSettings"
+                style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/settingsnewt" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Settings"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/settingsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@android:string/ok"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButtonRes"
+                style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/chip" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Resources"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/resText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="@android:string/ok"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dateCheck"
+        android:layout_width="152dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginEnd="75dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarMain"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarMain"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/progressBarMain"
+        app:layout_constraintTop_toBottomOf="@+id/scoreText"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

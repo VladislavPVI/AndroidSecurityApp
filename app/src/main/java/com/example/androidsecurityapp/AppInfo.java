@@ -10,12 +10,12 @@ public class AppInfo {
     private boolean trust;
     private String packageName;
 
-    public AppInfo(String label, List<String> commonPremissons, List<String> dangerousPremissons,String packageName) {
+    public AppInfo(String label, List<String> commonPremissons, List<String> dangerousPremissons, String packageName, boolean b) {
         this.label = label;
         this.commonPremissons = commonPremissons;
         this.dangerousPremissons = dangerousPremissons;
         this.expanded = false;
-        this.trust = false;
+        this.trust = b;
         this.packageName = packageName;
     }
 

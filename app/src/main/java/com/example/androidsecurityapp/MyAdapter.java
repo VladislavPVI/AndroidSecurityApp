@@ -4,17 +4,21 @@ import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<AppInfo> mDataset;
     private PackageManager pm;
+
 
 
     // Provide a reference to the views for each data item
@@ -24,11 +28,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         // each data item is just a string in this case
         public TextView textView;
         public ImageView imageView;
-        public ImageView alert;
         public TextView premissions;
         public TextView premissions2;
         public ConstraintLayout conLayout;
         public ConstraintLayout permiss;
+        public CheckBox checkPerm;
 
 
         public MyViewHolder(View v) {
@@ -38,9 +42,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             imageView = v.findViewById(R.id.imageView3);
             premissions = v.findViewById(R.id.textView5);
             premissions2 = v.findViewById(R.id.textView2);
-            alert = v.findViewById(R.id.imageView7);
             conLayout = v.findViewById(R.id.linearLayout2);
             permiss = v.findViewById(R.id.permiss);
+            checkPerm = v.findViewById(R.id.checkBoxPerm);
 
             conLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -48,6 +52,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     AppInfo appInfo = mDataset.get(getAdapterPosition());
                     appInfo.setExpanded(!appInfo.isExpanded());
                     notifyItemChanged(getAdapterPosition());
+                }
+            });
+
+            checkPerm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    AppInfo appInfo = mDataset.get(getAdapterPosition());
+                    appInfo.setTrust(isChecked);
                 }
             });
 
@@ -87,12 +99,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         List<String> commonPremissons = appInfo.getCommonPremissons();
 
         if (dangerousPremissons.size() != 0){
-            holder.alert.setVisibility(View.VISIBLE);
+            holder.checkPerm.setVisibility(View.VISIBLE);
             holder.premissions.setVisibility(View.VISIBLE);
             holder.premissions.setText(dangerousPremissons.toString());
         }
         else {
-            holder.alert.setVisibility(View.GONE);
+            holder.checkPerm.setVisibility(View.GONE);
             holder.premissions.setVisibility(View.GONE);
         }
 
@@ -106,6 +118,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         boolean isExpanded = appInfo.isExpanded();
         holder.permiss.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+        boolean isTrust = appInfo.isTrust();
+        holder.checkPerm.setChecked(isTrust);
 
     }
 

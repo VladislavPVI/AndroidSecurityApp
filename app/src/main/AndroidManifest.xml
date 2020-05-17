@@ -4,6 +4,7 @@
     package="com.example.androidsecurityapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -19,7 +20,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AppUsage"></activity>
+        <activity android:name=".ResourcesActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".RootActivity" />
+        <activity android:name=".AppUsage" />
         <activity android:name=".SensorActivity" />
         <activity android:name=".RamActivity" />
         <activity android:name=".FileScan" />
