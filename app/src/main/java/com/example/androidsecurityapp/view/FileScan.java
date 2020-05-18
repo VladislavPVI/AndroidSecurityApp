@@ -1,7 +1,4 @@
-package com.example.androidsecurityapp;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
+package com.example.androidsecurityapp.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,18 +6,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.androidsecurityapp.R;
+import com.example.androidsecurityapp.adapter.MyAdapterForApk;
+import com.example.androidsecurityapp.model.ApkInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class FileScan extends AppCompatActivity {
@@ -35,7 +32,7 @@ public class FileScan extends AppCompatActivity {
         PackageManager pm = getPackageManager();
         // apkView = findViewById(R.id.apkView);
 
-        SharedPreferences  prefs = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
 
         String json = prefs.getString("apkPaths", "");

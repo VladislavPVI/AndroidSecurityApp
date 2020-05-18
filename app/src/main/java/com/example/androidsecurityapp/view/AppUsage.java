@@ -1,38 +1,19 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.Manifest;
-import android.app.usage.NetworkStats;
-import android.app.usage.NetworkStatsManager;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.telephony.TelephonyManager;
-import android.text.format.DateUtils;
-import android.util.ArrayMap;
-import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.androidsecurityapp.R;
+import com.example.androidsecurityapp.adapter.MyAdapterForUsage;
+import com.example.androidsecurityapp.model.MyUsageStats;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class AppUsage extends AppCompatActivity {
 
@@ -58,7 +39,7 @@ public class AppUsage extends AppCompatActivity {
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerUsage);
-        mAdapter = new MyAdapterForUsage(listStat,getApplicationContext());
+        mAdapter = new MyAdapterForUsage(listStat, getApplicationContext());
         recyclerView.setAdapter(mAdapter);
 
     }

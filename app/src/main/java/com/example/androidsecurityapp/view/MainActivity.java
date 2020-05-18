@@ -1,7 +1,8 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.view;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +11,6 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -22,11 +22,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.androidsecurityapp.Analyse;
+import com.example.androidsecurityapp.R;
 import com.example.androidsecurityapp.availableSettings.Global;
 import com.example.androidsecurityapp.availableSettings.Secure;
 import com.example.androidsecurityapp.availableSettings.SystemS;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -75,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
         apkText = findViewById(R.id.apkText);
         resText = findViewById(R.id.resText);
         setText = findViewById(R.id.settingsText);
-
-
 
 
         date.setText(dateFormat.format(analyseDate));
@@ -153,17 +152,44 @@ public class MainActivity extends AppCompatActivity {
                             public void run() {
                                 analyse.setEnabled(true);
                                 loading.setVisibility(View.GONE);
-                                date.setText(dateFormat.format(analyseDate));
                                 progressBar.setVisibility(View.VISIBLE);
                                 date.setVisibility(View.VISIBLE);
                                 scoreText.setVisibility(View.VISIBLE);
                                 buttonArea.setVisibility(View.VISIBLE);
+                                updateViewData();
                             }
                         });
                     }
                 }).start();
-            }});
+            }
+        });
 
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void updateViewData() {
+        date.setText(dateFormat.format(analyseDate));
+        int score = analyseData.getScore();
+        if (score > 90) {
+            scoreText.setText(score + "/100\n EXCELLENT!");
+            hint.setText("Your phone security status is excellent. Tap below to get details. This wont affect your personal data.");
+        } else if (score > 80) {
+            scoreText.setText(score + "/100\n GOOD!");
+            hint.setText("Your phone security status is good. Tap below to get details. This wont affect your personal data.");
+        } else if (score > 65) {
+            scoreText.setText(score + "/100\n SATISFACTORY!");
+            hint.setText("Your phone security status is satisfactory. Tap below to get details. This wont affect your personal data.");
+        } else {
+            scoreText.setText(score + "/100\n IN DANGER!");
+            hint.setText("Your phone security status is dangerous. Tap below to get details. This wont affect your personal data.");
+        }
+
+        permText.setText(analyseData.getPermissonText());
+        rootText.setText(analyseData.getRootText());
+        apkText.setText(analyseData.getApkText());
+        resText.setText(analyseData.getResText());
+        setText.setText(analyseData.getSettingsText());
 
     }
 
@@ -173,18 +199,10 @@ public class MainActivity extends AppCompatActivity {
         prefs = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         analyseData = new Analyse(prefs, getApplicationContext());
         analyseDate = prefs.getLong("analyseDate", 0);
-        if (analyseDate!=0){
+        if (analyseDate != 0) {
             analyseData.loadSavedData();
-            scoreText.setText(analyseData.getScore()+"/"+"100\n GOOD!");
-            hint.setText("Your phone security status is good. Tap below to get details. This wont affect your personal data.");
-            permText.setText(analyseData.getPermissonText());
-            rootText.setText(analyseData.getRootText());
-            apkText.setText(analyseData.getApkText());
-            resText.setText(analyseData.getResText());
-            setText.setText(analyseData.getSettingsText());
-            date.setText(dateFormat.format(analyseDate));
-        }
-        else {
+            updateViewData();
+        } else {
             progressBar.setVisibility(View.GONE);
             scoreText.setVisibility(View.GONE);
             buttonArea.setVisibility(View.GONE);
@@ -197,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (analyseDate!=0){
+        if (analyseDate != 0) {
             analyseData.saveData();
         }
     }
@@ -218,10 +236,10 @@ public class MainActivity extends AppCompatActivity {
     public void saveHashMap(String key, Object obj) {
         Gson gson = new Gson();
         String json = gson.toJson(obj);
-        saveJson(json,key);
+        saveJson(json, key);
     }
 
-    public void saveJson(String json, String key){
+    public void saveJson(String json, String key) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putLong(key + "Date", Instant.now().toEpochMilli());
         editor.putString(key, json);
@@ -288,10 +306,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void backgroundThreadProcessing() {
-        if (analyseDate==0){
+        if (analyseDate == 0) {
             analyseData.initDataAnalyse(getSettings());
-        }
-        else analyseData.updateData(getSettings());
+        } else analyseData.updateData(getSettings());
         analyseDate = analyseData.getSaveDate();
     }
 }

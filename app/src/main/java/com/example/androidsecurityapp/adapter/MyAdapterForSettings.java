@@ -1,14 +1,16 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.androidsecurityapp.R;
+import com.example.androidsecurityapp.model.ChangesOfSettings;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -61,7 +63,7 @@ public class MyAdapterForSettings extends RecyclerView.Adapter<MyAdapterForSetti
     // Create new views (invoked by the layout manager)
     @Override
     public MyAdapterForSettings.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                           int viewType) {
+                                                                int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_settings, parent, false);
@@ -74,14 +76,14 @@ public class MyAdapterForSettings extends RecyclerView.Adapter<MyAdapterForSetti
     public void onBindViewHolder(MyAdapterForSettings.MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-       ChangesOfSettings changesOfSettings = mDataset.get(position);
+        ChangesOfSettings changesOfSettings = mDataset.get(position);
 
-       holder.nameOfSetting.setText(changesOfSettings.getSetting());
-       holder.checkBox.setChecked(changesOfSettings.isApproved());
-       holder.settingDateNew.setText(dateFormat.format(changesOfSettings.getNewDate()));
-       holder.settingDateOld.setText(dateFormat.format(changesOfSettings.getOldDate()));
-       holder.settingValueNew.setText(changesOfSettings.getNewValue());
-       holder.settingValueOld.setText(changesOfSettings.getOldValue());
+        holder.nameOfSetting.setText(changesOfSettings.getSetting());
+        holder.checkBox.setChecked(changesOfSettings.isApproved());
+        holder.settingDateNew.setText(dateFormat.format(changesOfSettings.getNewDate()));
+        holder.settingDateOld.setText(dateFormat.format(changesOfSettings.getOldDate()));
+        holder.settingValueNew.setText(changesOfSettings.getNewValue());
+        holder.settingValueOld.setText(changesOfSettings.getOldValue());
 
 
     }

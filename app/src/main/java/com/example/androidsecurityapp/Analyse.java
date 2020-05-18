@@ -16,6 +16,9 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.telephony.TelephonyManager;
 
+import com.example.androidsecurityapp.model.AppInfo;
+import com.example.androidsecurityapp.model.ChangesOfSettings;
+import com.example.androidsecurityapp.model.MyUsageStats;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -136,7 +139,6 @@ public class Analyse {
     }
 
 
-
     public void saveData() {
         Gson gson = new Gson();
         SharedPreferences.Editor editor = preferences.edit();
@@ -193,13 +195,12 @@ public class Analyse {
     }
 
 
-
     public void updateData(HashMap<String, String> newSettings) {
 
         oldSaveDate = saveDate;
         saveDate = System.currentTimeMillis();
 
-        appInfos = initData();
+        updateDataApp();
 
         rooted = isRootGiven();
 
@@ -433,9 +434,53 @@ public class Analyse {
         return "";
     }
 
+    private void updateDataApp() {
+        List<String> names = new ArrayList<>();
+        for (AppInfo appInfo : appInfos)
+            names.add(appInfo.getPackageName());
+
+        List<AppInfo> appList = new ArrayList<>();
+        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        for (ApplicationInfo ap : packages) {
+            if (names.contains(ap.packageName))
+                continue;
+            List<String> commonPremissons = new ArrayList<>();
+            List<String> dangerousPremissons = new ArrayList<>();
+            PackageInfo packageInfo = null;
+            try {
+                packageInfo = pm.getPackageInfo(ap.packageName, PackageManager.GET_PERMISSIONS);
+            } catch (PackageManager.NameNotFoundException e) {
+                continue;
+            }
+            String[] stringArray = packageInfo.requestedPermissions;
+
+            if (stringArray != null) {
+                for (String perm : stringArray) {
+                    if (DangerousPermissions.forCont(perm)) {
+                        dangerousPremissons.add(perm);
+                    } else {
+                        commonPremissons.add(perm);
+                    }
+                }
+            }
+            AppInfo appInfo = null;
+            if (dangerousPremissons.size() != 0)
+                appInfo = new AppInfo(ap.loadLabel(pm).toString(), commonPremissons, dangerousPremissons, ap.packageName, false);
+            else
+                appInfo = new AppInfo(ap.loadLabel(pm).toString(), commonPremissons, dangerousPremissons, ap.packageName, true);
+
+            appList.add(appInfo);
+        }
+        if (appList.size() != 0)
+            appInfos.addAll(appList);
+    }
+
+
     private List<AppInfo> initData() {
         List<AppInfo> appList = new ArrayList<>();
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
 
         for (ApplicationInfo ap : packages) {
             List<String> commonPremissons = new ArrayList<>();
@@ -452,9 +497,9 @@ public class Analyse {
                 for (String perm : stringArray) {
                     if (DangerousPermissions.forCont(perm)) {
                         dangerousPremissons.add(perm);
-                        continue;
+                    } else {
+                        commonPremissons.add(perm);
                     }
-                    commonPremissons.add(perm);
                 }
             }
             AppInfo appInfo = null;
@@ -488,27 +533,27 @@ public class Analyse {
         return saveDate;
     }
 
-    public double getScorePerm(){
+    public double getScorePerm() {
         int permissionsCount = 0;
-        for (AppInfo app : appInfos){
-            if (!app.isTrust()){
+        for (AppInfo app : appInfos) {
+            if (!app.isTrust()) {
                 permissionsCount++;
             }
         }
-        permissonText = permissionsCount+"/"+appInfos.size();
+        permissonText = permissionsCount + "/" + appInfos.size();
 
-        return permissionsCount / (double) appInfos.size() * 100.0;
+        return (1 - (permissionsCount / (double) appInfos.size())) * 100.0;
     }
 
-    public boolean nonTrustSettings(){
-        for (ChangesOfSettings sett : settingsChanges){
+    public boolean nonTrustSettings() {
+        for (ChangesOfSettings sett : settingsChanges) {
             if (!sett.isApproved())
                 return false;
         }
         return true;
     }
 
-    public double getStorage(){
+    public double getStorage() {
         StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
         long bytesAvailable = stat.getBlockSizeLong() * stat.getAvailableBlocksLong();
         long totalM = stat.getTotalBytes();
@@ -517,7 +562,7 @@ public class Analyse {
 
     }
 
-    public double getRam(){
+    public double getRam() {
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) applicationContext.getSystemService(ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
@@ -534,45 +579,45 @@ public class Analyse {
         return score;
     }
 
-    public int setScore(){
-        int score = 0;
+    public int setScore() {
+        double score = 0;
 
-        if (!rooted){
+        if (!rooted) {
             score += 35;
         }
-        rootText=String.valueOf(rooted);
+        rootText = String.valueOf(rooted);
 
-        int scoreTemp = (int) (getScorePerm()*0.3);
+        score += getScorePerm() * 0.3;
 
-        score += scoreTemp;
-
-        if (apkFiles.size()==0){
+        if (apkFiles.size() == 0) {
             score += 15;
-            apkText="GOOD";
-        }
-        else apkText="Details";
+            apkText = "GOOD";
+        } else apkText = "Details";
 
-        if (nonTrustSettings()){
+        if (nonTrustSettings()) {
             score += 5;
-            settingsText="GOOD";
-        }
-        else settingsText="Details";
+            settingsText = "GOOD";
+        } else settingsText = "Details";
 
-        double scoreRam  = getRam();
-        if (scoreRam>15)
+        double scoreRam = getRam();
+        if (scoreRam >= 15)
             score += 10;
+        else if (scoreRam >= 5)
+            score += 5;
 
         double scoreStorage = getStorage();
-        if (scoreStorage>10)
+        if (scoreStorage >= 10)
             score += 5;
+        else if (scoreRam >= 5)
+            score += 2.5;
 
-        if (scoreRam>15 && scoreStorage>10)
+        if (scoreRam > 15 && scoreStorage > 10)
             resText = "GOOD";
-        else if (scoreRam<5 && scoreStorage<5)
+        else if (scoreRam < 5 && scoreStorage < 5)
             resText = "BAD";
         else resText = "OK";
 
-        return score;
+        return (int) score;
 
 
     }

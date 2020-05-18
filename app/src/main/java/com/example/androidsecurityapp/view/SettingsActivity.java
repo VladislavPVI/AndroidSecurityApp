@@ -1,33 +1,19 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.view;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.app.admin.DevicePolicyManager;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.widget.Button;
-
-import com.example.androidsecurityapp.availableSettings.Global;
-import com.example.androidsecurityapp.availableSettings.Secure;
-import com.example.androidsecurityapp.availableSettings.SystemS;
+import com.example.androidsecurityapp.R;
+import com.example.androidsecurityapp.adapter.MyAdapterForSettings;
+import com.example.androidsecurityapp.model.ChangesOfSettings;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -45,6 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     }
+
     @Override
     protected void onPause() {
         Gson gson = new Gson();
@@ -65,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
         }.getType();
         settingsChanges = gson.fromJson(json, type);
 
-        if (settingsChanges != null && settingsChanges.size()!=0){
+        if (settingsChanges != null && settingsChanges.size() != 0) {
             MyAdapterForSettings mAdapter = new MyAdapterForSettings(settingsChanges);
             recyclerView.setAdapter(mAdapter);
         }

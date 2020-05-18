@@ -1,8 +1,7 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.adapter;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,12 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidsecurityapp.R;
+import com.example.androidsecurityapp.model.ApkInfo;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class MyAdapterForApk extends RecyclerView.Adapter<MyAdapterForApk.MyViewHolder> {
     private List<ApkInfo> mDataset;
@@ -54,10 +55,10 @@ public class MyAdapterForApk extends RecyclerView.Adapter<MyAdapterForApk.MyView
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 
 // 2. Chain together various setter methods to set the dialog characteristics
-                    builder.setMessage("Are you sure you want to delete "+file.getName()+" ?")
-                            .setTitle("Delete File") .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    builder.setMessage("Are you sure you want to delete " + file.getName() + " ?")
+                            .setTitle("Delete File").setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            if (file.delete()){
+                            if (file.delete()) {
                                 mDataset.remove(apkInfo);
                                 notifyDataSetChanged();
                             }
@@ -79,7 +80,6 @@ public class MyAdapterForApk extends RecyclerView.Adapter<MyAdapterForApk.MyView
         }
 
 
-
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -90,7 +90,7 @@ public class MyAdapterForApk extends RecyclerView.Adapter<MyAdapterForApk.MyView
     // Create new views (invoked by the layout manager)
     @Override
     public MyAdapterForApk.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                             int viewType) {
+                                                           int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_apk, parent, false);
@@ -109,7 +109,7 @@ public class MyAdapterForApk extends RecyclerView.Adapter<MyAdapterForApk.MyView
         holder.imageView.setImageDrawable(apkInfo.getImageView());
         holder.label.setText(apkInfo.getLabel());
         holder.path.setText(apkInfo.getPath());
-        holder.size.setText(String.valueOf(apkInfo.getSize() / 0x100000L)+"MB");
+        holder.size.setText(String.valueOf(apkInfo.getSize() / 0x100000L) + "MB");
 
 
     }

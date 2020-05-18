@@ -1,4 +1,4 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.adapter;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.androidsecurityapp.R;
+import com.example.androidsecurityapp.model.MyUsageStats;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -69,7 +72,7 @@ public class MyAdapterForUsage extends RecyclerView.Adapter<MyAdapterForUsage.My
     // Create new views (invoked by the layout manager)
     @Override
     public MyAdapterForUsage.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+                                                             int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_app_usage, parent, false);
@@ -96,34 +99,33 @@ public class MyAdapterForUsage extends RecyclerView.Adapter<MyAdapterForUsage.My
         long total = myUsageStats.getTotalTimeInForeground();
 
         long d = TimeUnit.MILLISECONDS.toDays(total);
-        long h = TimeUnit.MILLISECONDS.toHours(total)-TimeUnit.DAYS.toHours(d);
-        long m = TimeUnit.MILLISECONDS.toMinutes(total)-TimeUnit.HOURS.toMinutes(h)-TimeUnit.DAYS.toMinutes(d);
-        long s = TimeUnit.MILLISECONDS.toSeconds(total)-TimeUnit.MINUTES.toSeconds(m)-TimeUnit.HOURS.toSeconds(h)-TimeUnit.DAYS.toSeconds(d);
+        long h = TimeUnit.MILLISECONDS.toHours(total) - TimeUnit.DAYS.toHours(d);
+        long m = TimeUnit.MILLISECONDS.toMinutes(total) - TimeUnit.HOURS.toMinutes(h) - TimeUnit.DAYS.toMinutes(d);
+        long s = TimeUnit.MILLISECONDS.toSeconds(total) - TimeUnit.MINUTES.toSeconds(m) - TimeUnit.HOURS.toSeconds(h) - TimeUnit.DAYS.toSeconds(d);
 
         StringBuilder stringBuilder = new StringBuilder();
-        if (d!=0){
+        if (d != 0) {
             stringBuilder.append(d);
             stringBuilder.append("d ");
         }
-        if (h!=0){
+        if (h != 0) {
             stringBuilder.append(h);
             stringBuilder.append("h ");
         }
-        if (m!=0){
+        if (m != 0) {
             stringBuilder.append(m);
             stringBuilder.append("m ");
         }
-        if (s!=0){
+        if (s != 0) {
             stringBuilder.append(s);
             stringBuilder.append("s");
         }
 
         holder.total.setText(stringBuilder.toString());
-        holder.rxMobile.setText(Formatter.formatFileSize(appContext,myUsageStats.getRXMobile()));
-        holder.rxWIFI.setText(Formatter.formatFileSize(appContext,myUsageStats.getRXWIFI()));
-        holder.txMobile.setText(Formatter.formatFileSize(appContext,myUsageStats.getTXMobile()));
-        holder.txWIFI.setText(Formatter.formatFileSize(appContext,myUsageStats.getTXWIFI()));
-
+        holder.rxMobile.setText(Formatter.formatFileSize(appContext, myUsageStats.getRXMobile()));
+        holder.rxWIFI.setText(Formatter.formatFileSize(appContext, myUsageStats.getRXWIFI()));
+        holder.txMobile.setText(Formatter.formatFileSize(appContext, myUsageStats.getTXMobile()));
+        holder.txWIFI.setText(Formatter.formatFileSize(appContext, myUsageStats.getTXWIFI()));
 
 
     }

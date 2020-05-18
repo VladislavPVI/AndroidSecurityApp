@@ -1,4 +1,4 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.model;
 
 public class MyUsageStats implements Comparable<MyUsageStats> {
     private Long totalTimeInForeground;
@@ -30,6 +30,7 @@ public class MyUsageStats implements Comparable<MyUsageStats> {
     public long getRXWIFI() {
         return rxWIFI;
     }
+
     public long getTXMobile() {
         return txMobile;
     }

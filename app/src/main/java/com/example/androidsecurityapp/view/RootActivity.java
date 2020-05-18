@@ -1,12 +1,13 @@
-package com.example.androidsecurityapp;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.androidsecurityapp.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.androidsecurityapp.R;
 
 public class RootActivity extends AppCompatActivity {
 

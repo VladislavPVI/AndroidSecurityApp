@@ -1,4 +1,4 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.model;
 
 import java.util.List;
 

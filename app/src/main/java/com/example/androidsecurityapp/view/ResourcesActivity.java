@@ -1,7 +1,4 @@
-package com.example.androidsecurityapp;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+package com.example.androidsecurityapp.view;
 
 import android.Manifest;
 import android.app.ActivityManager;
@@ -9,7 +6,6 @@ import android.app.usage.NetworkStats;
 import android.app.usage.NetworkStatsManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -27,6 +23,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import com.example.androidsecurityapp.R;
 
 import java.util.Calendar;
 import java.util.Timer;
@@ -95,11 +96,10 @@ public class ResourcesActivity extends AppCompatActivity {
         });
 
 
-
         appU.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ResourcesActivity.this,AppUsage.class);
+                Intent intent = new Intent(ResourcesActivity.this, AppUsage.class);
                 startActivity(intent);
             }
         });
@@ -134,10 +134,10 @@ public class ResourcesActivity extends AppCompatActivity {
         mTimer.schedule(mMyTimerTask, 1000, 2000);
     }
 
-    public void isGpsOn(){
-        LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+    public void isGpsOn() {
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) )
+        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
             myGps.setText("ON");
         else myGps.setText("OFF");
 
@@ -165,18 +165,18 @@ public class ResourcesActivity extends AppCompatActivity {
             temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
             level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             batteryBar.setProgress(level);
-            batteryText.setText(level+"%");
+            batteryText.setText(level + "%");
             batteryTemp.setText(String.valueOf(get_temp()) + "°C");
         }
 
     }
 
-    public void setStorage(){
+    public void setStorage() {
         StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
         long bytesAvailable = stat.getBlockSizeLong() * stat.getAvailableBlocksLong();
         long totalM = stat.getTotalBytes();
 
-        double percentAvail = (totalM-bytesAvailable) / (double) totalM * 100.0;
+        double percentAvail = (totalM - bytesAvailable) / (double) totalM * 100.0;
 
         storageBar.setProgress((int) percentAvail);
 
@@ -186,7 +186,7 @@ public class ResourcesActivity extends AppCompatActivity {
     }
 
 
-    public void setRam(){
+    public void setRam() {
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
@@ -194,7 +194,7 @@ public class ResourcesActivity extends AppCompatActivity {
         long ramAV = mi.availMem;
         long ramTotal = mi.totalMem;
 
-        double percentAvail = (ramTotal-ramAV) / (double) ramTotal * 100.0;
+        double percentAvail = (ramTotal - ramAV) / (double) ramTotal * 100.0;
 
         ramBar.setProgress((int) percentAvail);
 

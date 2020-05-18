@@ -16,7 +16,7 @@ public enum DangerousPermissions {
 
     static {
         for (DangerousPermissions value : EnumSet.allOf(DangerousPermissions.class)) {
-            nameToSet.add("android.permission."+value.name());
+            nameToSet.add("android.permission." + value.name());
         }
     }
 

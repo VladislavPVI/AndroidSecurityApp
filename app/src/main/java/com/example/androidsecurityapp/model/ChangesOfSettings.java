@@ -1,4 +1,4 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.model;
 
 public class ChangesOfSettings {
     private String setting;

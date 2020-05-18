@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".view.SettingsActivity">
 
     <TextView
         android:id="@+id/textView20"
@@ -22,7 +22,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerSettings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="556dp"
         android:layout_marginTop="40dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"

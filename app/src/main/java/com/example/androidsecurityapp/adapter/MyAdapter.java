@@ -1,4 +1,4 @@
-package com.example.androidsecurityapp;
+package com.example.androidsecurityapp.adapter;
 
 import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
@@ -12,13 +12,14 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
+import com.example.androidsecurityapp.R;
+import com.example.androidsecurityapp.model.AppInfo;
+
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<AppInfo> mDataset;
     private PackageManager pm;
-
 
 
     // Provide a reference to the views for each data item
@@ -98,12 +99,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         List<String> dangerousPremissons = appInfo.getDangerousPremissons();
         List<String> commonPremissons = appInfo.getCommonPremissons();
 
-        if (dangerousPremissons.size() != 0){
+        if (dangerousPremissons.size() != 0) {
             holder.checkPerm.setVisibility(View.VISIBLE);
             holder.premissions.setVisibility(View.VISIBLE);
             holder.premissions.setText(dangerousPremissons.toString());
-        }
-        else {
+        } else {
             holder.checkPerm.setVisibility(View.GONE);
             holder.premissions.setVisibility(View.GONE);
         }
@@ -111,8 +111,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         if (commonPremissons.size() != 0) {
             holder.premissions2.setVisibility(View.VISIBLE);
             holder.premissions2.setText(commonPremissons.toString());
-        }
-        else holder.premissions2.setVisibility(View.GONE);
+        } else holder.premissions2.setVisibility(View.GONE);
 
         holder.textView.setText(appInfo.getLabel());
 
