@@ -123,10 +123,7 @@ public class ResourcesActivity extends AppCompatActivity {
         setRam();
         setStorage();
 
-        myBatInfoReceiver = new ResourcesActivity.mBatInfoReceiver();
 
-        this.registerReceiver(this.myBatInfoReceiver,
-                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
 
         mTimer = new Timer();
@@ -287,5 +284,20 @@ public class ResourcesActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        myBatInfoReceiver = new ResourcesActivity.mBatInfoReceiver();
+
+        this.registerReceiver(this.myBatInfoReceiver,
+                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(myBatInfoReceiver);
     }
 }

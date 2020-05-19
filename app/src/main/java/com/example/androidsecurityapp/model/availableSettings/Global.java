@@ -1,4 +1,4 @@
-package com.example.androidsecurityapp.availableSettings;
+package com.example.androidsecurityapp.model.availableSettings;
 
 public enum Global {
     ADB_ENABLED, AIRPLANE_MODE_ON, AIRPLANE_MODE_RADIOS, ALWAYS_FINISH_ACTIVITIES, BLUETOOTH_ON,

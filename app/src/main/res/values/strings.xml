@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android Security Checker</string>
+    <string name="app_name">Security Checker</string>
     <string name="mah_bitches">Mah Bitches</string>
     <string name="root_title">Root Access</string>
     <string name="about_root">Rooting is the process of allowing users of smartphones, tablets and other devices running the Android mobile operating system to attain privileged control (known as root access) over various Android subsystems. Rooting is often performed with the goal of overcoming limitations that carriers and hardware manufacturers put on some devices.</string>
@@ -7,4 +7,8 @@
     <string name="apkWarn">Not recommended to install applications from unknown sources</string>
     <string name="root">TRUE</string>
     <string name="analyseHint">We analyze your phone. Please, wait!</string>
+    <string name="ex">Your phone security status is excellent. Tap below to get details. This wont affect your personal data.</string>
+    <string name="good">Your phone security status is good. Tap below to get details. This wont affect your personal data.</string>
+    <string name="satis">Your phone security status is satisfactory. Tap below to get details. This wont affect your personal data.</string>
+    <string name="dang">Your phone security status is dangerous. Tap below to get details. This wont affect your personal data.</string>
 </resources>

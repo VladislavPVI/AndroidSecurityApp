@@ -1,4 +1,4 @@
-package com.example.androidsecurityapp.availableSettings;
+package com.example.androidsecurityapp.model.availableSettings;
 
 public enum Secure {
     ACCESSIBILITY_DISPLAY_INVERSION_ENABLED, ACCESSIBILITY_ENABLED, ALLOWED_GEOLOCATION_ORIGINS,

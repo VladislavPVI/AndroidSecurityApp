@@ -18,6 +18,7 @@ import android.telephony.TelephonyManager;
 
 import com.example.androidsecurityapp.model.AppInfo;
 import com.example.androidsecurityapp.model.ChangesOfSettings;
+import com.example.androidsecurityapp.model.DangerousPermissions;
 import com.example.androidsecurityapp.model.MyUsageStats;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -546,10 +547,11 @@ public class Analyse {
     }
 
     public boolean nonTrustSettings() {
+        if (settingsChanges!=null){
         for (ChangesOfSettings sett : settingsChanges) {
             if (!sett.isApproved())
                 return false;
-        }
+        }}
         return true;
     }
 

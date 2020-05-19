@@ -1,12 +1,17 @@
 package com.example.androidsecurityapp.view;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.AppOpsManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,12 +26,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.androidsecurityapp.Analyse;
 import com.example.androidsecurityapp.R;
-import com.example.androidsecurityapp.availableSettings.Global;
-import com.example.androidsecurityapp.availableSettings.Secure;
-import com.example.androidsecurityapp.availableSettings.SystemS;
+import com.example.androidsecurityapp.model.availableSettings.Global;
+import com.example.androidsecurityapp.model.availableSettings.Secure;
+import com.example.androidsecurityapp.model.availableSettings.SystemS;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -37,6 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int MY_PERMISSIONS_REQUEST = 1;
+
     final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss");
     SharedPreferences prefs;
     public static final String APP_PREFERENCES = "analyseData";
@@ -55,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView apkText;
     private TextView resText;
     private TextView setText;
+    private Button analyse;
 
 
     @Override
@@ -69,6 +79,27 @@ public class MainActivity extends AppCompatActivity {
         buttonArea = findViewById(R.id.buttonsArea);
         loading = findViewById(R.id.loading);
         hint = findViewById(R.id.hint);
+        analyse = findViewById(R.id.buttonAnalyse);
+
+
+        List<String> needPerm = new ArrayList();
+
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED)
+            needPerm.add(Manifest.permission.READ_PHONE_STATE);
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+            needPerm.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+
+     if (needPerm.size()!=0) {
+           ActivityCompat.requestPermissions(MainActivity.this,needPerm.toArray(new String[0]),
+                  MY_PERMISSIONS_REQUEST);
+
+        }
 
 
         permText = findViewById(R.id.permText);
@@ -133,56 +164,58 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Button analyse = findViewById(R.id.buttonAnalyse);
+
         analyse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.GONE);
-                date.setVisibility(View.GONE);
-                scoreText.setVisibility(View.GONE);
-                loading.setVisibility(View.VISIBLE);
-                buttonArea.setVisibility(View.GONE);
-                analyse.setEnabled(false);
-                hint.setText(R.string.analyseHint);
 
-                new Thread(new Runnable() {
-                    public void run() {
-                        backgroundThreadProcessing();
-                        handler.post(new Runnable() {
-                            public void run() {
-                                analyse.setEnabled(true);
-                                loading.setVisibility(View.GONE);
-                                progressBar.setVisibility(View.VISIBLE);
-                                date.setVisibility(View.VISIBLE);
-                                scoreText.setVisibility(View.VISIBLE);
-                                buttonArea.setVisibility(View.VISIBLE);
-                                updateViewData();
-                            }
-                        });
-                    }
-                }).start();
-            }
-        });
+
+                    progressBar.setVisibility(View.GONE);
+                    date.setVisibility(View.GONE);
+                    scoreText.setVisibility(View.GONE);
+                    loading.setVisibility(View.VISIBLE);
+                    buttonArea.setVisibility(View.GONE);
+                    analyse.setEnabled(false);
+                    hint.setText(R.string.analyseHint);
+
+                    new Thread(new Runnable() {
+                        public void run() {
+                            backgroundThreadProcessing();
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    analyse.setEnabled(true);
+                                    loading.setVisibility(View.GONE);
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    date.setVisibility(View.VISIBLE);
+                                    scoreText.setVisibility(View.VISIBLE);
+                                    buttonArea.setVisibility(View.VISIBLE);
+                                    updateViewData();
+                                }
+                            });
+                        }
+                    }).start();
+                }
+             });
 
 
     }
 
-    @SuppressLint("SetTextI18n")
+
     public void updateViewData() {
         date.setText(dateFormat.format(analyseDate));
         int score = analyseData.getScore();
         if (score > 90) {
             scoreText.setText(score + "/100\n EXCELLENT!");
-            hint.setText("Your phone security status is excellent. Tap below to get details. This wont affect your personal data.");
+            hint.setText(R.string.ex);
         } else if (score > 80) {
             scoreText.setText(score + "/100\n GOOD!");
-            hint.setText("Your phone security status is good. Tap below to get details. This wont affect your personal data.");
+            hint.setText(R.string.good);
         } else if (score > 65) {
             scoreText.setText(score + "/100\n SATISFACTORY!");
-            hint.setText("Your phone security status is satisfactory. Tap below to get details. This wont affect your personal data.");
+            hint.setText(R.string.satis);
         } else {
             scoreText.setText(score + "/100\n IN DANGER!");
-            hint.setText("Your phone security status is dangerous. Tap below to get details. This wont affect your personal data.");
+            hint.setText(R.string.dang);
         }
 
         permText.setText(analyseData.getPermissonText());
@@ -196,7 +229,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        prefs = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        if (!checkUsagePerm()) {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startActivity(intent);
+        }
+            prefs = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         analyseData = new Analyse(prefs, getApplicationContext());
         analyseDate = prefs.getLong("analyseDate", 0);
         if (analyseDate != 0) {
@@ -304,11 +341,36 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+private boolean checkUsagePerm(){
+        AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(), getPackageName());
+        return mode == AppOpsManager.MODE_ALLOWED;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permission was granted, yay! Do the
+                // contacts-related task you need to do.
+            } else {
+                analyse.setEnabled(false);
 
+            }
+            return;
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
     private void backgroundThreadProcessing() {
         if (analyseDate == 0) {
             analyseData.initDataAnalyse(getSettings());
         } else analyseData.updateData(getSettings());
         analyseDate = analyseData.getSaveDate();
     }
+
+
 }

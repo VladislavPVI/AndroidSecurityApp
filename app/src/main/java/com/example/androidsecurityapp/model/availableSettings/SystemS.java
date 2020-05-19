@@ -1,4 +1,4 @@
-package com.example.androidsecurityapp.availableSettings;
+package com.example.androidsecurityapp.model.availableSettings;
 
 public enum SystemS {
     ACCELEROMETER_ROTATION, ALARM_ALERT, BLUETOOTH_DISCOVERABILITY,

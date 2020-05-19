@@ -10,7 +10,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.androidsecurityapp.DangerousPermissions;
+import com.example.androidsecurityapp.model.DangerousPermissions;
 import com.example.androidsecurityapp.R;
 import com.example.androidsecurityapp.adapter.MyAdapter;
 import com.example.androidsecurityapp.model.AppInfo;
