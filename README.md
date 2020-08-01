@@ -1,6 +1,7 @@
 # Android Security App
 
 This is an app for assessing the security of your Android device.
+DEMO: https://youtu.be/YaIBx4B78tc
 (Study project)
 
 ## Score conversion table
